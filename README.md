@@ -1,84 +1,80 @@
-# IBM-PBEL
-🌦️ IoT-Based Weather Monitoring System
+# IoT-Based Weather Monitoring System
 
-📌 About the Project
+A learning project for monitoring temperature, relative humidity, and atmospheric pressure with a NodeMCU ESP8266 and a BME280 sensor. The sketch can publish readings to a ThingSpeak channel over Wi-Fi.
 
-The IoT-Based Weather Monitoring System is designed to monitor environmental conditions using the Internet of Things (IoT). It uses a NodeMCU ESP8266 microcontroller and environmental sensors to collect weather-related data and transmit it to a cloud dashboard for remote monitoring and visualisation.
+> **Project status:** Simulation / development stage. This repository contains starter code and wiring notes; it has not been verified on physical hardware. Do not describe it as a tested hardware prototype until you have tested it.
 
-The project aims to make environmental monitoring more accessible by combining sensor technology, Wi-Fi connectivity, and cloud-based data visualisation.
+## Features planned
 
-🎯 Objectives
+- Read temperature (°C), relative humidity (%) and pressure (hPa) from a BME280.
+- Connect to Wi-Fi using credentials configured locally in the sketch.
+- Send readings to ThingSpeak fields 1–3.
+- Print sensor readings and upload status to the Serial Monitor.
 
-- Monitor temperature and humidity.
-- Measure atmospheric pressure using a compatible pressure sensor.
-- Monitor air quality using a suitable air-quality sensor.
-- Transmit sensor readings over Wi-Fi.
-- Visualise environmental data using the ThingSpeak IoT platform.
-- Explore applications in smart environments and environmental monitoring.
+## Components
 
-🛠️ Hardware Components
+- NodeMCU ESP8266 development board
+- BME280 sensor module with I²C interface
+- Jumper wires and breadboard (for a future hardware build)
+- Wi-Fi connection and ThingSpeak account (for cloud upload)
 
-- NodeMCU ESP8266 Wi-Fi development board
-- Temperature and humidity sensor
-- BME280 or compatible pressure sensor
-- MQ135 or compatible air-quality sensor
-- Jumper wires and breadboard
-- Suitable power supply
+The BME280 measures temperature, humidity and pressure. It does **not** measure air quality/AQI. Add a suitable air-quality sensor and implement its reading/calibration separately if you want that feature.
 
-The final component list depends on the sensors actually used in the prototype.
+## Wiring (I²C)
 
-💻 Technologies Used
+| BME280 pin | NodeMCU ESP8266 |
+|---|---|
+| VIN / VCC | 3V3 (check your breakout board's requirements) |
+| GND | GND |
+| SDA | D2 (GPIO4) |
+| SCL | D1 (GPIO5) |
 
-- Internet of Things (IoT)
-- Embedded C/C++ for microcontroller programming
-- Arduino IDE
-- ThingSpeak cloud platform
-- Wi-Fi communication
-- Sensor data collection and visualisation
+Use a 3.3 V-compatible I²C connection. Sensor breakout boards differ, so check the labels and specifications of your exact module before wiring.
 
-⚙️ How It Works
+## Arduino IDE setup
 
-1. Environmental sensors collect readings from the surroundings.
-2. The NodeMCU ESP8266 reads the sensor data.
-3. The microcontroller connects to a Wi-Fi network.
-4. Sensor readings are transmitted to ThingSpeak.
-5. The cloud dashboard displays the available data for remote monitoring.
+1. Install the ESP8266 board package and select **NodeMCU 1.0 (ESP-12E Module)**.
+2. In Library Manager, install:
+   - **ThingSpeak** by MathWorks
+   - **Adafruit BME280 Library**
+   - **Adafruit Unified Sensor**
+   - **Adafruit BusIO** (if requested as a dependency)
+3. Open `src/WeatherMonitoring.ino`.
+4. Replace the placeholder Wi-Fi name/password, ThingSpeak channel number, and Write API Key in the sketch. Never commit real passwords or API keys to a public repository.
+5. In ThingSpeak, create a channel with:
+   - Field 1: Temperature (°C)
+   - Field 2: Humidity (%)
+   - Field 3: Pressure (hPa)
+6. Upload to the board and open Serial Monitor at 115200 baud.
 
-📊 Parameters Monitored
+## ThingSpeak notes
 
-- Temperature
-- Relative humidity
-- Atmospheric pressure
-- Air quality
+The sketch sends one update every 20 seconds. Check the current limits and requirements for your ThingSpeak account before changing the interval. A successful HTTP status from the library indicates that the update was accepted; it does not validate sensor accuracy.
 
-🚀 Applications
+## Simulation and testing
 
-- Environmental monitoring
-- Smart homes and buildings
-- Educational IoT projects
-- Weather data collection
-- Environmental research prototypes
+This repository is starter material, not proof of a completed simulation or working device. If your simulator does not support the BME280 or external network access, you may need to test the sensor and ThingSpeak parts separately or use a compatible simulator.
 
-🔮 Future Improvements
+## Repository structure
 
-- Add rain and wind-speed monitoring.
-- Develop a mobile-friendly dashboard.
-- Add threshold-based notifications.
-- Store historical readings for trend analysis.
-- Integrate additional sensors for broader environmental monitoring.
+```text
+IoT-Based-Weather-Monitoring-System/
+├── README.md
+├── .gitignore
+├── src/
+│   └── WeatherMonitoring.ino
+└── docs/
+    └── WIRING.md
+```
 
-👨‍💻 Author
+## Future improvements
 
-Mohammad Dawoud Eqbal
+- Add an air-quality sensor with safe voltage interfacing and calibration.
+- Add a dashboard screenshot and a circuit diagram after testing.
+- Add sensor fault handling and reconnect logic.
+- Record real test results and limitations.
 
-B.Tech Student — Internet of Things
+## Author
 
-Greater Noida Institute of Technology (GNIOT)
-
-📄 Project Status
-
-Academic IoT project. Update this section with the current implementation status, working demonstration, circuit diagram, and source code as they become available.
-
-⭐ Support
-
-If you find this project useful for learning about IoT and environmental monitoring, consider giving the repository a star.
+Mohammad Dawoud Eqbal  
+B.Tech — Internet of Things, GNIOT
